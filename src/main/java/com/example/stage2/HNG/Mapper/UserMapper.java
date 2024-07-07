@@ -1,9 +1,8 @@
 package com.example.stage2.HNG.Mapper;
 
-import com.example.stage2.HNG.ApiResponse.UserResponse;
+import com.example.stage2.HNG.ApiResponse.Success.UserResponse;
 import com.example.stage2.HNG.Dto.UserDto;
 import com.example.stage2.HNG.Model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserMapper {
@@ -28,7 +27,8 @@ public class UserMapper {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getPhone()
+                user.getPhone(),
+                user.getOrganizations()
         );
         return userResponse;
     }

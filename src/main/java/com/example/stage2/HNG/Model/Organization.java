@@ -1,5 +1,6 @@
 package com.example.stage2.HNG.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,16 +16,18 @@ import java.util.Set;
 public class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     @Column(unique = true)
     private String orgId;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String description;
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "organizations")
     private Set<User> users = new HashSet<>();
 
+    public Organization(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
