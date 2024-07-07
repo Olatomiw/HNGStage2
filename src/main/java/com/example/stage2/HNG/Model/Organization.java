@@ -3,6 +3,9 @@ package com.example.stage2.HNG.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -20,5 +23,8 @@ public class Organization {
     private String name;
     @Column(nullable = false)
     private String description;
+
+    @ManyToMany(mappedBy = "organizations")
+    private Set<User> users = new HashSet<>();
 
 }

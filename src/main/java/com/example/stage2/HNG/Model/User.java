@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -35,6 +38,12 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "org_id")
+    )
+    private Set<Organization> organizations = new HashSet<>();
     public User(String firstName, String lastName, String email, String password, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;

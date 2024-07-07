@@ -10,6 +10,7 @@ import com.example.stage2.HNG.Service.CreateNewUser;
 import com.example.stage2.HNG.Service.UserFieldValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,9 +20,14 @@ public class CreateNewUserImpl implements CreateNewUser {
     private UserFieldValidator userFieldValidator;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     @Override
     public UserResponse addNewUser(UserDto userDto) throws InvalidInputException {
-        User user = UserMapper.mapToUser(userDto);
+        User user = UserMapper.mapToUser(userDto,passwordEncoder);
         Long count = userRepository.count();
         Long id = ++count;
 

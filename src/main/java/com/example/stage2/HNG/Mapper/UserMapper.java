@@ -3,15 +3,20 @@ package com.example.stage2.HNG.Mapper;
 import com.example.stage2.HNG.ApiResponse.UserResponse;
 import com.example.stage2.HNG.Dto.UserDto;
 import com.example.stage2.HNG.Model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserMapper {
 
-    public static User mapToUser(UserDto userDto){
+
+
+    public static User mapToUser(UserDto userDto, PasswordEncoder passwordEncoder){
         User orgUser = new User(
+
                 userDto.getFirstName(),
                 userDto.getLastName(),
                 userDto.getEmail(),
-                userDto.getPassword(),
+                passwordEncoder.encode(userDto.getPassword()),
                 userDto.getPhone()
         );
         return orgUser;
