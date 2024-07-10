@@ -9,13 +9,12 @@ public class UserMapper {
 
 
 
-    public static User mapToUser(UserDto userDto, PasswordEncoder passwordEncoder){
+    public static User mapToUser(UserDto userDto){
         User orgUser = new User(
-
                 userDto.getFirstName(),
                 userDto.getLastName(),
                 userDto.getEmail(),
-                passwordEncoder.encode(userDto.getPassword()),
+                userDto.getPassword(),
                 userDto.getPhone()
         );
         return orgUser;

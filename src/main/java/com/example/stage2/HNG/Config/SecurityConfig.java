@@ -1,11 +1,15 @@
 package com.example.stage2.HNG.Config;
 
+import com.example.stage2.HNG.Config.JwtConfig.JWTConfig;
 import com.example.stage2.HNG.Config.UserDetails.MyUserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +23,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    private JWTConfig jwtConfig;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
         DefaultSecurityFilterChain securityFilterChain = http
@@ -26,14 +33,14 @@ public class SecurityConfig {
                 .cors(e->e.disable())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(e->e
-                        .requestMatchers("/auth/register").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .requestMatchers("/**").authenticated()
                 )
-//                .sessionManagement(e->e
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
-//                .authenticationProvider(authenticationProvider())
-//                .addFilterBefore(jwTfilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(e->e
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtConfig, UsernamePasswordAuthenticationFilter.class)
                 .build();
         return securityFilterChain;
     }
@@ -53,6 +60,10 @@ public class SecurityConfig {
         daoAuthenticationProvider.setUserDetailsService(userDetailsService());
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+        return configuration.getAuthenticationManager();
     }
 
 }
